@@ -8,3 +8,7 @@ _Disclaimer: While the design of the UI is clearly based on Google, this project
 •	Designed a RESTful backend server to manage the requests from the front-end and adjusted results to a custom pagination method.
 •	Implementation of the front-end using React, JavaScript, and Material UI to create a GUI resembling Google’s approach.
 •	Utilized: Python, NLTK, NetworkX, Flask-RESTful, MongoDB, JavaScript, React, Axios, Material UI.
+
+
+
+<a href="#"><img src="/docs/screenshots/landing-page.jpg" /></a>
