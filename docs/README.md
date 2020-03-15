@@ -11,6 +11,4 @@ _Disclaimer: While the design of the UI is clearly based on Google, this project
 
 ![Landing Page](/docs/screenshots/landing-page.jpg?raw=true)
 
-<a href="" target="_blank"><img src="/docs/screenshots/landing-page.jpg?raw=true" /></a>
-
 
