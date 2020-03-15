@@ -9,6 +9,8 @@ _Disclaimer: While the design of the UI is clearly based on Google, this project
 •	Implementation of the front-end using React, JavaScript, and Material UI to create a GUI resembling Google’s approach.
 •	Utilized: Python, NLTK, NetworkX, Flask-RESTful, MongoDB, JavaScript, React, Axios, Material UI.
 
+![Landing Page](/docs/screenshots/landing-page.jpg)
+
+<a href="" target="_blank"><img src="/docs/screenshots/landing-page.jpg" /></a>
 
 
-<a href="#"><img src="/docs/screenshots/landing-page.jpg" /></a>
