@@ -66,12 +66,9 @@ export const ListResult = ({ url, title, snippet, searchLemmatized }) => {
   return (
     <Paper elevation={1} className={classes.paper}>
       <Typography className={classes.url}>{formattedUrl}</Typography>
-      <Typography
-        className={classes.title}
-        onClick={() => (window.location.href = `//${url}`)}
-      >
+      <a href={`//${url}`} className={classes.title}>
         {title}
-      </Typography>
+      </a>
       <Typography className={classes.snippet}>
         {snippet.split(" ").map(word => {
           let isBold = false;
@@ -79,7 +76,7 @@ export const ListResult = ({ url, title, snippet, searchLemmatized }) => {
             if (RegExp(`\\b${lemmatized}\\b`, "g").test(word.toLowerCase()))
               isBold = true;
           });
-          return isBold ? <b key = {url}> {word}</b> : ` ${word}`;
+          return isBold ? <b key={url}> {word}</b> : ` ${word}`;
         })}
       </Typography>
     </Paper>
