@@ -33,19 +33,19 @@ _Disclaimer: While the design of the UI is clearly based on Google, this project
 
 ## Screenshots
 
-**Landing Page**
+**Landing Page**&nbsp;
 Landing page containing the logo, search bar, and search button. A search can be initiated by pressing the enter button or clicking the search button.
 ![Landing Page](/docs/screenshots/landing-page.jpg?raw=true)
 
-**Search Page: "Informatics Donald Bren"**
+**Search Page: "Informatics Donald Bren"**&nbsp;
 After searching for a term, the website will query and retrieve the results from the database. The interface includes a top bar or header with the logo (Clicking it will take the user back to the home page), the search bar, and a clickable search button (Magnifying glass). The result includes statistics such as the estimated number of results and the time it took to query and calculate the ranking of the search terms. Additionally, the title of the result is underlined on hover and the relevant terms in the snippet are be bolded.
 ![Search Page](/docs/screenshots/informatics-donald-bren.jpg?raw=true)
 
-**Search Page Bottom Pagination: "professor"**
+**Search Page Bottom Pagination: "professor"**&nbsp;
 Each page consists of 20 results and can be navigated through a pagination system where it changes the URL of the query.
 ![Search Page Bottom Pagination](/docs/screenshots/informatics-donald-bren.jpg?raw=true)
 
-**Search Page Bottom Pagination (Page 13): "professor"**
+**Search Page Bottom Pagination (Page 13): "professor"**&nbsp;
 For quick navigation it includes the first and last pages of the search result.
 ![Search Page Bottom Pagination Page 13](/docs/screenshots/professor-pagination-13.jpg?raw=true)
 
