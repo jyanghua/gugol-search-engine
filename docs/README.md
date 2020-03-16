@@ -1,11 +1,11 @@
 # Gugol Search Engine
 
 
-_Disclaimer: While the design of the UI is clearly based on Google, this project is not for commercialization or for-profit purposes. The main purpose of the project is to understand the system of a search engine and the process behind it._
+*Disclaimer: While the design of the UI is clearly based on Google, this project is not for commercialization or for-profit purposes. The main purpose of the project is to understand the system of a search engine and the process behind it.*
 
 ## Summary
 
-* Created a web crawler that would go through a set of URLs and HTML content in the subdomain of ics.uci.edu.
+* Tests were done using a static corpus that was previously crawled, which consisted of HTML files in a contained subdomain (ics.uci.edu).
 * Constructed the inverted index by using tokenization, filters, and lemmatization of the content with NLTK.
 * Applied TF-IDF, cosine similarity (vectorization), and page ranking to calculation of the final scoring of query and document terms.
 * Designed a RESTful backend server to manage the requests from the front-end and adjusted results to a custom pagination method.
@@ -33,33 +33,64 @@ _Disclaimer: While the design of the UI is clearly based on Google, this project
 
 ## Screenshots
 
-**Landing Page**&nbsp;
-Landing page containing the logo, search bar, and search button. A search can be initiated by pressing the enter button or clicking the search button.
+**Landing Page**
+
+Landing page containing the logo, search bar, and search button. A search can be initiated by pressing the enter button or clicking the search button.<br><br>
 ![Landing Page](/docs/screenshots/landing-page.jpg?raw=true)
 
-**Search Page: "Informatics Donald Bren"**&nbsp;
-After searching for a term, the website will query and retrieve the results from the database. The interface includes a top bar or header with the logo (Clicking it will take the user back to the home page), the search bar, and a clickable search button (Magnifying glass). The result includes statistics such as the estimated number of results and the time it took to query and calculate the ranking of the search terms. Additionally, the title of the result is underlined on hover and the relevant terms in the snippet are be bolded.
+**Search Page: "Informatics Donald Bren"**
+After searching for a term, the website will query and retrieve the results from the database. The interface includes a top bar or header with the logo (Clicking it will take the user back to the home page), the search bar, and a clickable search button (Magnifying glass). The result includes statistics such as the estimated number of results and the time it took to query and calculate the ranking of the search terms. Additionally, the title of the result is underlined on hover and the relevant terms in the snippet are be bolded.<br><br>
 ![Search Page](/docs/screenshots/informatics-donald-bren.jpg?raw=true)
 
-**Search Page Bottom Pagination: "professor"**&nbsp;
-Each page consists of 20 results and can be navigated through a pagination system where it changes the URL of the query.
+**Search Page Bottom Pagination: "professor"**
+
+Each page consists of 20 results and can be navigated through a pagination system where it changes the URL of the query.<br><br>
 ![Search Page Bottom Pagination](/docs/screenshots/informatics-donald-bren.jpg?raw=true)
 
-**Search Page Bottom Pagination (Page 13): "professor"**&nbsp;
-For quick navigation it includes the first and last pages of the search result.
+**Search Page Bottom Pagination (Page 13): "professor"**
+
+For quick navigation it includes the first and last pages of the search result.<br><br>
 ![Search Page Bottom Pagination Page 13](/docs/screenshots/professor-pagination-13.jpg?raw=true)
+
 
 ## Process
 
 
 ### Pre-processing
 
+The pre-processing part of the search engine will encompass everything related to analyzing the content from the websites or pages and extracting relevant information such as the frequency of the terms and positional index of each word. This data is later used to calculate scores that will speed up the process of finding the websites that rank the highest according to the search terms.
 
 #### Web Crawling
 
+The "web" crawling part has been excluded from this final part of the project as the search engine tests were done on a static corpus that was previously downloaded. This is mainly done to avoid any kind of disruptions and denial of access while doing live web crawling.
+
+The concept behind web crawling relies on having a starting point or domain, and adding all the outgoing links on the page to a queue of URLs. Once all the outgoing links from a page is added to the queue, it will continue to the next one and so on. To make sure it doesn't go over the ones that were already visited, there will be a set/list containing the URLs that were visited.
+
+The URLs also have to go through a filtering mechanism to exclude URLs that are traps and could potentially stop the progress of the web crawler or add duplicate content to the index of the search engine. These URLs include dynamically generated URLs such as calendars or events, e-commerce carts, account settings, scripts, sort and filtering systems, user sessions, and many other custom URLs generated by the server. The most common patterns are using parameters, repetitive subdirectories and patterns, and duplicate meta descriptions. A lot of the traps also include websites that constantly links to it's own content.
+
+#### HTML Parsing
+
+All the HTML content will have to be parsed correctly to ensure the extraction of the text stays relevant to what the users are looking for. During the HTML parsing, it will go through a HTML validator by using the library TidyLib which detects which parts of the HTML content has broken tags and fix them by adding the corresponding closing or opening missing tags. Additionally, during the parsing, it will assess content from websites that include an extremely high amount of numbers as content, or pages that have an abnormally large body text (greater than 5 MB of text). Other content that is stripped off the raw HTML file are the scripts, javascript, and styling tags.
+
+#### Tag Categorization
+
+Beautiful soup 4 and LXML are used primarily to categorize the content of the HTML file into 6 categories which will be useful for scoring and having different weighting schemes to construct the inverted index. The 6 categories from most important to least important are:
+
+1. Title: TITLE
+2. H1-H2: H1, H2
+3. H3-H6: H3, H4, H5, H6
+4. Strong: STRONG, B, EM, I, U, DL, OL, UL
+5. Anchor words (Links): A
+6. Plain text or body: The rest
+
+#### Tokenization and Lemmatization
+
+The process of tokenization is done by using the NLTK library which will separate the text into words and include the position it was found. The structure used is a list of tuples that contain the word and the positional index it was found. After the tokenization, the following step is the lemmatization and frequency count. In this case, it will not go through the word stemming process as it will considerably impact the result of the search in this particular case. The lemmatization uses the WordNetLemmatizer and NLTK to reduce the number of tokens that are indexed.
 
 #### Inverted Index
 
+Two different inverted indexes are created to add different weighting schemes and robustness to the search engine. The main inverted index contains each term as a document followed by a list of postings where each element or node represents the page (URL) it was found on.
+Bigrams
 
 ### Ranking
 
