@@ -51,7 +51,7 @@ After searching for a term, the website will query and retrieve the results from
 **Search Page Bottom Pagination: "professor"**
 
 Each page consists of 20 results and can be navigated through a pagination system where it changes the URL of the query.<br><br>
-![Search Page Bottom Pagination](/docs/screenshots/informatics-donald-bren.jpg?raw=true)<br>
+![Search Page Bottom Pagination](/docs/screenshots/professor-pagination.jpg?raw=true)<br>
 
 **Search Page Bottom Pagination (Page 13): "professor"**
 
