@@ -62,6 +62,10 @@ For quick navigation it includes the first and last pages of the search result.<
 
 [![Watch the video](/docs/screenshots/demo-preview.jpg?raw=true)](https://streamable.com/u49vx)
 
+<a href="https://streamable.com/u49vx" target="_blank">
+  <img width="220" height="250" border="0" align="center"  src="/docs/screenshots/demo-preview.jpg?raw=true"/>
+</a>
+
 
 ## Process
 
