@@ -58,6 +58,10 @@ Each page consists of 20 results and can be navigated through a pagination syste
 For quick navigation it includes the first and last pages of the search result.<br><br>
 ![Search Page Bottom Pagination Page 13](/docs/screenshots/professor-pagination-13.jpg?raw=true)<br>
 
+**1 Minute Demo**
+
+<div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;"><iframe src="https://streamable.com/s/u49vx/zoxost" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe></div>
+
 
 ## Process
 
