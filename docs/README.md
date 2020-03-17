@@ -60,7 +60,7 @@ For quick navigation it includes the first and last pages of the search result.<
 
 **1 Minute Demo**
 
-[![Watch the video]()](https://streamable.com/u49vx)
+[![Watch the video](/docs/screenshots/demo-preview.jpg?raw=true)](https://streamable.com/u49vx)
 
 
 ## Process
