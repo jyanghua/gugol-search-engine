@@ -9,15 +9,16 @@ from pprint import pprint
 
 DB_NAME = 'project3db'
 
-"""
-This class is responsible for handling all database storage needs
-Using MongoDB and storing data locally.
-
-Dependencies:
-    - MongoDB installed (Compass to look at the data through GUI)
-    - pymongo for Python
-"""
 class Storage:
+    """
+    This class is responsible for handling all database storage needs
+    Using MongoDB and storing data locally.
+
+    Dependencies:
+        - MongoDB installed (Compass to look at the data through GUI)
+        - pymongo for Python
+    """
+
     def __init__(self):
         self.client = MongoClient("localhost", 27017)
         self.db = self.client[DB_NAME]
@@ -32,14 +33,14 @@ class Storage:
         self.collection_docs = self.db['test_docs_v6']
 
 
-    """
-    This method inserts all the calculated scores to the MongoDB collection of Terms.
-        - IDF for each term
-        - TF for each posting
-        - TF-IDF for each posting
-    It uses unordered bulk insertion to optimize the speed of data insertion.
-    """
     def insert_scores(self, term, idf, count, scores):
+        """
+        This method inserts all the calculated scores to the MongoDB collection of Terms.
+            - IDF for each term
+            - TF for each posting
+            - TF-IDF for each posting
+        It uses unordered bulk insertion to optimize the speed of data insertion.
+        """
         
         try:
             self.collection_terms.update_one(
@@ -59,14 +60,14 @@ class Storage:
         except BulkWriteError as bwe:
             pprint(bwe.details)
 
-    """
-    This method inserts all the calculated scores to the MongoDB collection of Bi-grams.
-        - IDF for each term
-        - TF for each posting
-        - TF-IDF for each posting
-    It uses unordered bulk insertion to optimize the speed of data insertion.
-    """
     def insert_scores_bigrams(self, term: str, idf: float, count: int, scores: dict):
+        """
+        This method inserts all the calculated scores to the MongoDB collection of Bi-grams.
+            - IDF for each term
+            - TF for each posting
+            - TF-IDF for each posting
+        It uses unordered bulk insertion to optimize the speed of data insertion.
+        """
         
         try:
             self.collection_bigrams.update_one(
@@ -87,15 +88,15 @@ class Storage:
             pprint(bwe.details)
         
 
-    """
-    This method will insert all the postings of a page to the collection of Terms.
-        - Adds the ID (path ID)
-        - Adds the natural frequency of the term occurrences
-        - Adds the weighted frequency of the term occurrences.
-        - Adds an array containing the positional index of each of the term occurrences.
-    It uses unordered bulk insertion to optimize the speed of data insertion.
-    """
     def insert_posting(self, id: str, posting: dict, weighted_freq: dict):
+        """
+        This method will insert all the postings of a page to the collection of Terms.
+            - Adds the ID (path ID)
+            - Adds the natural frequency of the term occurrences
+            - Adds the weighted frequency of the term occurrences.
+            - Adds an array containing the positional index of each of the term occurrences.
+        It uses unordered bulk insertion to optimize the speed of data insertion.
+        """
 
         try:
             # Creation of MongoDB index to speed-up insertion and querying.
@@ -119,13 +120,13 @@ class Storage:
         except BulkWriteError as bwe:
             pprint(bwe.details)
 
-    """
-    This method will insert all the postings of a page to the collection of Bi-grams.
-        - Adds the ID (path ID)
-        - Adds the weighted frequency of the term occurrences (title and body weights)
-    It uses unordered bulk insertion to optimize the speed of data insertion.
-    """
     def insert_posting_bigram(self, id, posting: dict):
+        """
+        This method will insert all the postings of a page to the collection of Bi-grams.
+            - Adds the ID (path ID)
+            - Adds the weighted frequency of the term occurrences (title and body weights)
+        It uses unordered bulk insertion to optimize the speed of data insertion.
+        """
 
         try:
             # Creation of MongoDB index to speed-up insertion and querying.
@@ -148,13 +149,13 @@ class Storage:
             pprint(bwe.details)
 
 
-    """
-    This method will insert all the path ID's and their respective URLs to the
-    collection of documents. This is to mirror the Bookeeping JSON file stored locally.
-    Will be needed to store additional information that will be added such as page rank.
-    It uses unordered bulk insertion to optimize the speed of data insertion.
-    """
     def insert_documents(self, dict_path: dict):
+        """
+        This method will insert all the path ID's and their respective URLs to the
+        collection of documents. This is to mirror the Bookeeping JSON file stored locally.
+        Will be needed to store additional information that will be added such as page rank.
+        It uses unordered bulk insertion to optimize the speed of data insertion.
+        """
 
         try:
             # Creation of MongoDB index to speed-up insertion and querying.
@@ -179,12 +180,12 @@ class Storage:
             pprint(bwe.details)
 
 
-    """
-    This method will insert the page rank scores of each URL or path ID to the
-    collection of documents.
-    It uses unordered bulk insertion to optimize the speed of data insertion.
-    """
     def insert_pagerank(self, page_rank: dict):
+        """
+        This method will insert the page rank scores of each URL or path ID to the
+        collection of documents.
+        It uses unordered bulk insertion to optimize the speed of data insertion.
+        """
 
         try:
             # Creation of MongoDB index to speed-up insertion and querying.
@@ -202,11 +203,12 @@ class Storage:
         except BulkWriteError as bwe:
             pprint(bwe.details)
 
-    """
-    This method inserts a the title and the snippet of each document or page
-    to the collection of documents in MongoDB
-    """
     def insert_title_snippet(self, path: str, title: str, snippet: str):
+        """
+        This method inserts a the title and the snippet of each document or page
+        to the collection of documents in MongoDB
+        """
+        
         # Creation of MongoDB index to speed-up insertion and querying.
         # If it already exists it will be ignored.
         self.collection_docs.create_index([ ("path_id", ASCENDING) ])

@@ -21,11 +21,12 @@ BIGRAM_MULTIPLIER = 0.5     # Bi-gram multiplier alpha that will determine how m
 
 RESULTS_DISPLAYED = 20      # Number of results that are returned
 
-"""
-This class is responsible for handling all user based searches and
-retrieving the top ranked results from the Mongo DB database
-"""
 class Search:
+    """
+    This class is responsible for handling all user based searches and
+    retrieving the top ranked results from the Mongo DB database
+    """
+
     def __init__(self):
         # MongoDB initialization
         self.client = MongoClient("localhost", 27017)
@@ -41,25 +42,25 @@ class Search:
         self.cached_docs = self.q.get_docs()    # Dictionary containing all paths, mappings to URLs,
         self.load_dict()                        # pagerank, title, and snippet for each document
         
-    """
-    This method is responsible for getting all the results for the search terms
-    by using MongoDB's aggregation pipelines where it will query the results using
-    an OR statement.
-
-    MongoDB Aggregation/Pipeline (From Query: get_doc_length_tf_idf):
-    -   Finds documents that match with at least 1 of the terms and will sum the number
-    of documents it matches into a new field. The number of documents where the term/s
-    appears in is sorted in descending order because the more documents it appears in, the
-    more relevant is the document/page for the search.
-    -   After sorting by number of documents, the aggregation will sort by TF-IDF (or TF
-    depending on which SMART notation is being used) in descending order.
-
-    Takes into consideration the bi-grams by using the bi-gram ratio for weighting.
-    Adds in the page rank scores to each of the final scores of the document as a tiebreaker.
-
-    Using weighting scheme ltc.ltc
-    """
     def retrieve_results(self, search: str) -> list:
+        """
+        This method is responsible for getting all the results for the search terms
+        by using MongoDB's aggregation pipelines where it will query the results using
+        an OR statement.
+
+        MongoDB Aggregation/Pipeline (From Query: get_doc_length_tf_idf):
+        -   Finds documents that match with at least 1 of the terms and will sum the number
+        of documents it matches into a new field. The number of documents where the term/s
+        appears in is sorted in descending order because the more documents it appears in, the
+        more relevant is the document/page for the search.
+        -   After sorting by number of documents, the aggregation will sort by TF-IDF (or TF
+        depending on which SMART notation is being used) in descending order.
+
+        Takes into consideration the bi-grams by using the bi-gram ratio for weighting.
+        Adds in the page rank scores to each of the final scores of the document as a tiebreaker.
+
+        Using weighting scheme ltc.ltc
+        """
         
         # Start the stopwatch to measure the time it takes to retrieve the result
         # It is used in the front-end to show the user how fast it was. 
@@ -169,13 +170,14 @@ class Search:
 
         return (sorted_results, len(sorted_results), query_speed, search_lemmatized)
 
-    """
-    This method will construct the results in a way that can be read in JSON for the api.
-    It will paginate the results by only returning 20 results at a time using the 'start'
-    argument as the starting point of the next 20 results.
-    Returns a list of dictionaries containing the url, title, and the snippet of the document/page.
-    """
     def construct_results(self, results: list, start: int) -> 'List of dictionaries': 
+        """
+        This method will construct the results in a way that can be read in JSON for the api.
+        It will paginate the results by only returning 20 results at a time using the 'start'
+        argument as the starting point of the next 20 results.
+        Returns a list of dictionaries containing the url, title, and the snippet of the document/page.
+        """
+
         paginated_results = results[start:start+RESULTS_DISPLAYED]
         complete_result = []
 
@@ -187,12 +189,13 @@ class Search:
         return complete_result
 
 
-    """
-    This method will load the dictionary to memory and it will contain the terms with their
-    respective IDF score and postings count. This is needed to calculate the length of the
-    query and the document.
-    """
     def load_dict(self):
+        """
+        This method will load the dictionary to memory and it will contain the terms with their
+        respective IDF score and postings count. This is needed to calculate the length of the
+        query and the document.
+        """
+        
         list_terms = self.q.get_dict_without_postings()
         for term in list_terms:
             self.cached_dict[term['term']]['idf'] = term['idf']

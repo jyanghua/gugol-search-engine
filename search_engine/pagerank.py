@@ -15,11 +15,11 @@ from pprint import pprint
 # Regex that will match if a URL contains a protocol
 regex_protocol = re.compile(r'https?://')
 
-"""
-Gets the file paths and url's to each document from the json file.
-Starting point to iterate through the entire corpus.
-"""
 def read_json() -> 'Dict: {path : url}':
+    """
+    Gets the file paths and url's to each document from the json file.
+    Starting point to iterate through the entire corpus.
+    """
 
     try:
         with open("WEBPAGES_RAW/bookkeeping.json", "r", encoding="utf-8") as file:
@@ -29,12 +29,13 @@ def read_json() -> 'Dict: {path : url}':
     except IOError:
         print("Json file not found in the directory.")
 
-"""
-This method will create a dictionary of URLs as key, and a list of URLs it points towards
-as value.
-It will not add URLs that are external to the current corpus of URLs or Path IDs.
-"""
+
 def outgoing_links(dict_corpus: dict) -> dict:
+    """
+    This method will create a dictionary of URLs as key, and a list of URLs it points towards
+    as value.
+    It will not add URLs that are external to the current corpus of URLs or Path IDs.
+    """
 
     dict_outgoing = {}
     raw = ""

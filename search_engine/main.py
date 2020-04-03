@@ -28,11 +28,13 @@ WEIGHT_ANCHOR = 1 # Weight for anchor token frequency
 paths_list = []
 dict_path = {}
 
-"""
-Gets the file paths to each document from the json file.
-Starting point to iterate through the entire corpus.
-"""
+
 def read_json() -> 'List: file paths':
+    """
+    Gets the file paths to each document from the json file.
+    Starting point to iterate through the entire corpus.
+    """
+
     global paths_list
     global dict_path
 
@@ -50,11 +52,13 @@ def read_json() -> 'List: file paths':
     paths_list = sorted(paths_list, key=lambda d: tuple(map(int, d.split('/'))))
     
 
-"""
-This method retrieves all the content, proprocess them, and insert the
-relevant data to the database.
-"""
+
 def preprocess_all(p: Preprocessing(), s: Storage()):
+    """
+    This method retrieves all the content, proprocess them, and insert the
+    relevant data to the database.
+    """
+
     corpus_count = 0
 
     # Loops through the entire list of paths (corpus)
@@ -172,12 +176,12 @@ def preprocess_all(p: Preprocessing(), s: Storage()):
 
 
 
-"""
-This method calculates all the terms scoring for the TF, IDF, and TF-IDF.
-Additionally, it will insert all the scores to the MongoDB collection of terms.
-"""
 def calculate_scores(s: Storage(), q: Query()):
-    
+    """
+    This method calculates all the terms scoring for the TF, IDF, and TF-IDF.
+    Additionally, it will insert all the scores to the MongoDB collection of terms.
+    """
+
     list_terms = q.get_all_terms()
     dict_postings_count = q.postings_count()
     count_unique_paths = q.doc_count()
@@ -205,12 +209,12 @@ def calculate_scores(s: Storage(), q: Query()):
 
 
 
-"""
-This method calculates all the bi-grams scoring for the TF, IDF, and TF-IDF.
-Additionally, it will insert all the scores to the MongoDB collection of bi-grams.
-"""
 def calculate_scores_bigrams(s: Storage(), q: Query()):
-    
+    """
+    This method calculates all the bi-grams scoring for the TF, IDF, and TF-IDF.
+    Additionally, it will insert all the scores to the MongoDB collection of bi-grams.
+    """    
+
     # Calculate Term Frequency and IDF for all bigrams and insert to the DB
     list_bigrams = q.get_all_bigrams()
     dict_postings_bigrams_count = q.postings_bigrams_count()
@@ -236,11 +240,13 @@ def calculate_scores_bigrams(s: Storage(), q: Query()):
         logger.info("Processed Bi-gram {} ... Fetched: {} ... Percentage: {}%".format(
         term, counter, round((counter/len(list_bigrams)) * 100 , 2)))
 
-"""
-This method will insert all the documents/pages (With Path ID and respective URLs)
-to the MongoDB collection of documents.
-"""
+
 def create_database_docs(s: Storage(), q: Query()):
+    """
+    This method will insert all the documents/pages (With Path ID and respective URLs)
+    to the MongoDB collection of documents.
+    """
+
     s.insert_documents(dict_path)
     
 

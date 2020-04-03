@@ -35,11 +35,12 @@ class Query:
         # Collection for documents
         self.collection_docs = self.db['test_docs_v6']
 
-    """
-    This method uses an aggregation pipeline to get the number of documents
-    related to the term (Size of postings array)
-    """
+
     def postings_count(self):
+        """
+        This method uses an aggregation pipeline to get the number of documents
+        related to the term (Size of postings array)
+        """
 
         pipeline = [
             {
@@ -59,11 +60,11 @@ class Query:
         return result
 
 
-    """
-    This method uses an aggregation pipeline to get the number of documents
-    related to the bi-grams (Size of postings array for bi-grams)
-    """
     def postings_bigrams_count(self):
+        """
+        This method uses an aggregation pipeline to get the number of documents
+        related to the bi-grams (Size of postings array for bi-grams)
+        """
         
         pipeline = [
             {
@@ -83,11 +84,12 @@ class Query:
         return result
 
 
-    """
-    This method uses an aggregation pipeline to get a list of terms without
-    the content of each posting. Used if none of the posting information is needed.
-    """
     def get_dict_without_postings(self):
+        """
+        This method uses an aggregation pipeline to get a list of terms without
+        the content of each posting. Used if none of the posting information is needed.
+        """
+
         pipeline = [
             {
                 '$project': {
@@ -99,11 +101,12 @@ class Query:
         return list(self.collection_terms.aggregate(pipeline))
 
 
-    """
-    This method uses an aggregation pipeline to get all the terms in the entire
-    collection and returns them sorted alphabetically in ascending order in a list
-    """
     def get_all_terms(self):
+        """
+        This method uses an aggregation pipeline to get all the terms in the entire
+        collection and returns them sorted alphabetically in ascending order in a list
+        """
+
         pipeline = [
             {
                 '$project': {
@@ -119,11 +122,12 @@ class Query:
         return [d['term'] for d in list(self.collection_terms.aggregate(pipeline))]
 
 
-    """
-    This method uses an aggregation pipeline to get all the bi-grams in the entire
-    collection and returns them sorted alphabetically in ascending order in a list
-    """
     def get_all_bigrams(self):
+        """
+        This method uses an aggregation pipeline to get all the bi-grams in the entire
+        collection and returns them sorted alphabetically in ascending order in a list
+        """
+
         pipeline = [
             {
                 '$project': {
@@ -139,35 +143,39 @@ class Query:
         return [d['term'] for d in list(self.collection_bigrams.aggregate(pipeline, allowDiskUse = True))]
 
 
-    """
-    This method gets the total number of terms in the collection of terms.
-    """
     def term_count(self):
+        """
+        This method gets the total number of terms in the collection of terms.
+        """
+
         return self.collection_terms.count()
 
 
-    """
-    This metod gets the number of unique paths (URLs) in the collection of terms.
-    """
     def doc_count(self):
+        """
+        This metod gets the number of unique paths (URLs) in the collection of terms.
+        """
+
         return len(self.collection_terms.distinct('postings.path_id'))
 
 
-    """
-    This metod gets the number of unique paths (URLs) in the collection of bi-grams.
-    """
     def bigram_doc_count(self):
+        """
+        This metod gets the number of unique paths (URLs) in the collection of bi-grams.
+        """
+
         return len(self.collection_bigrams.distinct('postings.path_id'))
 
 
-    """
-    This method uses an aggregation pipeline to get all the frequency of a term,
-    which is sorted in descending order.
-    Limit is the number of results that the user would like.
-
-    This was used for Milestone 1.
-    """
     def find_term_freq_desc(self, term: str, limit: int):
+        """
+        This method uses an aggregation pipeline to get all the frequency of a term,
+        which is sorted in descending order.
+        Limit is the number of results that the user would like.
+
+        This was used for Milestone 1.
+        """
+
         pipeline = [
             {
                 '$match': {
@@ -196,12 +204,13 @@ class Query:
         return list(self.collection_terms.aggregate(pipeline))
 
 
-    """
-    This method uses an aggregation pipeline to get all the postings (and it's content) of a term.
-    
-    This was used for Milestone 1.
-    """
     def get_term(self, term: str):
+        """
+        This method uses an aggregation pipeline to get all the postings (and it's content) of a term.
+        
+        This was used for Milestone 1.
+        """
+
         pipeline = [
             {
                 '$match': {
@@ -225,11 +234,12 @@ class Query:
         return list(self.collection_terms.aggregate(pipeline))
         
 
-    """
-    This method uses an aggregation pipeline to get all the postings
-    (and it's weighted frequency) of a term.
-    """
     def get_weighted_freq(self, term: str):
+        """
+        This method uses an aggregation pipeline to get all the postings
+        (and it's weighted frequency) of a term.
+        """
+
         pipeline = [
             {
                 '$match': {
@@ -250,11 +260,12 @@ class Query:
         return list(self.collection_terms.aggregate(pipeline))
 
 
-    """
-    This method uses an aggregation pipeline to get all the postings
-    (and it's weighted frequency) of a bigram.
-    """
     def get_bigram_freq(self, term):
+        """
+        This method uses an aggregation pipeline to get all the postings
+        (and it's weighted frequency) of a bigram.
+        """
+
         pipeline = [
             {
                 '$match': {
@@ -275,25 +286,25 @@ class Query:
         return list(self.collection_bigrams.aggregate(pipeline))
 
 
-    """
-    This method uses an aggregation pipeline to calculate the document length
-    for a multiword query:
-        - Matches using an OR operator all the terms that the user searched.
-        - Unwind the postings to individual objects in the aggregatio pipeline.
-        - Projects (Only shows) the necessary information (TF-IDF and Path ID).
-        - Group will do the following:
-            - Add the number of documents where the searched terms were found
-                (It will match the same path_ids, meaning it comes from the
-                same document)
-            - Add the TF-IDF values from each of the terms for every matching doc.
-            - Starts calculating the doc length by finding the pow of 2 of the TF-IDF
-                and adds the values from each of the terms.
-        - Sorts the results by number of documents in descending order, and afterwards
-            sorts by TF-IDF in descending order.
-        - Finally it projects again to finalize the calculation of doc length by finding
-            the square root of the summed TF-IDFs
-    """
     def get_doc_length_tf_idf(self, terms):
+        """
+        This method uses an aggregation pipeline to calculate the document length
+        for a multiword query:
+            - Matches using an OR operator all the terms that the user searched.
+            - Unwind the postings to individual objects in the aggregatio pipeline.
+            - Projects (Only shows) the necessary information (TF-IDF and Path ID).
+            - Group will do the following:
+                - Add the number of documents where the searched terms were found
+                    (It will match the same path_ids, meaning it comes from the
+                    same document)
+                - Add the TF-IDF values from each of the terms for every matching doc.
+                - Starts calculating the doc length by finding the pow of 2 of the TF-IDF
+                    and adds the values from each of the terms.
+            - Sorts the results by number of documents in descending order, and afterwards
+                sorts by TF-IDF in descending order.
+            - Finally it projects again to finalize the calculation of doc length by finding
+                the square root of the summed TF-IDFs
+        """
         
         temp = []
         for t in terms:
@@ -350,25 +361,25 @@ class Query:
         return list(self.collection_terms.aggregate(pipeline))
 
 
-    """
-    This method uses an aggregation pipeline to calculate the document length
-    for a multiword query:
-        - Matches using an OR operator all the terms that the user searched.
-        - Unwind the postings to individual objects in the aggregatio pipeline.
-        - Projects (Only shows) the necessary information (TF and Path ID).
-        - Group will do the following:
-            - Add the number of documents where the searched terms were found
-                (It will match the same path_ids, meaning it comes from the
-                same document)
-            - Add the TF values from each of the terms for every matching doc.
-            - Starts calculating the doc length by finding the pow of 2 of the TF
-                and adds the values from each of the terms.
-        - Sorts the results by number of documents in descending order, and afterwards
-            sorts by TF in descending order.
-        - Finally it projects again to finalize the calculation of doc length by finding
-            the square root of the summed TF
-    """
     def get_doc_length_tf(self, terms):
+        """
+        This method uses an aggregation pipeline to calculate the document length
+        for a multiword query:
+            - Matches using an OR operator all the terms that the user searched.
+            - Unwind the postings to individual objects in the aggregatio pipeline.
+            - Projects (Only shows) the necessary information (TF and Path ID).
+            - Group will do the following:
+                - Add the number of documents where the searched terms were found
+                    (It will match the same path_ids, meaning it comes from the
+                    same document)
+                - Add the TF values from each of the terms for every matching doc.
+                - Starts calculating the doc length by finding the pow of 2 of the TF
+                    and adds the values from each of the terms.
+            - Sorts the results by number of documents in descending order, and afterwards
+                sorts by TF in descending order.
+            - Finally it projects again to finalize the calculation of doc length by finding
+                the square root of the summed TF
+        """
         
         temp = []
         for t in terms:
@@ -425,12 +436,13 @@ class Query:
         return list(self.collection_terms.aggregate(pipeline))
 
 
-    """
-    This method uses an aggregation pipeline to get all the postings associated to
-    the term and will return them organized in a dictionary to handling of the
-    GET requests.
-    """
     def get_term_postings(self, term: str):
+        """
+        This method uses an aggregation pipeline to get all the postings associated to
+        the term and will return them organized in a dictionary to handling of the
+        GET requests.
+        """
+
         pipeline = [
             {
                 '$match': {
@@ -461,12 +473,13 @@ class Query:
         return dict_postings
 
 
-    """
-    This method uses an aggregation pipeline to get all the postings associated to
-    the bi-gram and will return them organized in a dictionary to handling of the
-    GET requests.
-    """
     def get_bigram_postings(self, term):
+        """
+        This method uses an aggregation pipeline to get all the postings associated to
+        the bi-gram and will return them organized in a dictionary to handling of the
+        GET requests.
+        """
+
         pipeline = [
             {
                 '$match': {
@@ -495,16 +508,17 @@ class Query:
         return dict_postings
 
 
-    """
-    This method uses an aggregation pipeline to get all the documents and will
-    return the data as a dictionary containing the following items for each document:
-        - Path ID
-        - URL
-        - Page rank
-        - Title
-        - Snippet
-    """
     def get_docs(self):
+        """
+        This method uses an aggregation pipeline to get all the documents and will
+        return the data as a dictionary containing the following items for each document:
+            - Path ID
+            - URL
+            - Page rank
+            - Title
+            - Snippet
+        """
+
         pipeline = [
             {
                 '$project': {
@@ -519,12 +533,13 @@ class Query:
 
         return dict_docs
 
-    """
-    This method prints the results in a file for the queried terms.
-
-    This was used for Milestone 1
-    """
     def print_urls(self, term, limit):
+        """
+        This method prints the results in a file for the queried terms.
+
+        This was used for Milestone 1
+        """
+        
         # Saves the valid URL list to a text file
         try:
             with open('search_results.txt', 'a', encoding="utf-8") as file_results:

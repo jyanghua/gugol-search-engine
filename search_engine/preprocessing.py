@@ -28,13 +28,15 @@ regex_numbers = re.compile(r"-?\b\d*\.?\d+(e(\+|-)\d*)?\b")
 # Finds all the links that contain common extensions or files
 regex_links = re.compile(r"(?:(?:http|https):\/\/)?([-a-zA-Z0-9.]{2,256}\.[a-z]{2,4})\b(?:\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?")
 
-"""
-This class is responsible for handling all document preprocessing.
-Includes fetching the content, fixing broken tags, separating the content into
-different categories, tokenizing (different types), lemmatization, porter stemmer, 
-and word frequency.
-"""
+
 class Preprocessing:
+    """
+    This class is responsible for handling all document preprocessing.
+    Includes fetching the content, fixing broken tags, separating the content into
+    different categories, tokenizing (different types), lemmatization, porter stemmer, 
+    and word frequency.
+    """
+
     def __init__(self):
         self.stop_words = set()
         # By using the lemmatizer for the first time it will load WordNet into memory.
@@ -51,35 +53,38 @@ class Preprocessing:
             print("Stop words file not found in the directory.")
 
 
-    """
-    This method will fetch the content that is located in the file path.
-    Separates the content into the following 6 categories for scoring and
-    weighting:
-        1. Title: TITLE
-        2. H1-H2: H1, H2
-        3. H3-H6: H3, H4, H5, H6
-        4. Strong: STRONG, B, EM, I, U, DL, OL, UL
-        5. Plain text or body: The rest
-        6. Anchor words (Links): A
-
-    Returns a dictionary containing the following keys containing information:
-        - id : identifier of the document (same as path)
-        - len_doc : total length of the document (by character)
-        - broken_body : True if body tags are incomplete
-        - number_alpha_ratio : the ratio between numbers and alphabets
-        - removed_numbers : True if the numbers were removed in preprocessing
-        - title : String containing title of the document (text before body tag
-            if no title tags)
-        - body : String containing the text surrounded by the body tags, or
-            usually the rest of the doc
-        - h1h2 : String containing the text with h1 and h2 tags
-        - h3h6 : String containing the text with h3, h4, h5, and h6 tags
-        - strong : String containg all the text that have strong, bold, emphasis,
-            italic, underlined, description list, ordered list, unordered list tags
-        - anchor : String containing text related to hyperlinks
-    """
+    
     def fetch_content(self, path: str) -> 'Dict{id, len_doc, broken_body, number_alpha_ratio,' \
                                             + 'removed_numbers, title, body, h1h2, h3h6, strong, anchor, paragraph}':
+        """
+        This method will fetch the content that is located in the file path.
+        Separates the content into the following 6 categories for scoring and
+        weighting:
+            1. Title: TITLE
+            2. H1-H2: H1, H2
+            3. H3-H6: H3, H4, H5, H6
+            4. Strong: STRONG, B, EM, I, U, DL, OL, UL
+            5. Plain text or body: The rest
+            6. Anchor words (Links): A
+
+        Returns a dictionary containing the following keys containing information:
+            - id : identifier of the document (same as path)
+            - len_doc : total length of the document (by character)
+            - broken_body : True if body tags are incomplete
+            - number_alpha_ratio : the ratio between numbers and alphabets
+            - removed_numbers : True if the numbers were removed in preprocessing
+            - title : String containing title of the document (text before body tag
+                if no title tags)
+            - body : String containing the text surrounded by the body tags, or
+                usually the rest of the doc
+            - h1h2 : String containing the text with h1 and h2 tags
+            - h3h6 : String containing the text with h3, h4, h5, and h6 tags
+            - strong : String containg all the text that have strong, bold, emphasis,
+                italic, underlined, description list, ordered list, unordered list tags
+            - anchor : String containing text related to hyperlinks
+        """
+        
+        
         doc_dict = {'id': path}
         raw = ""
         try:
@@ -195,10 +200,11 @@ class Preprocessing:
         return doc_dict
 
 
-    """
-    Tokenizer without any kind of stop word filters nor minimum char limits
-    """
     def tokenize_no_filter(self, content: str) -> 'List[tokens]':
+        """
+        Tokenizer without any kind of stop word filters nor minimum char limits
+        """
+
         tokenList = []
         mainString = ""
 
@@ -214,13 +220,14 @@ class Preprocessing:
         return tokenList
 
 
-    """
-    Tokenizer that uses punctuation as delimiter and will remove all stop words,
-    words shorter than 4 characters, and any special characters that do not
-    belong to ascii.
-    Returns a list of strings (tokens)
-    """
     def tokenize(self, content: str) -> 'List[tokens]':
+        """
+        Tokenizer that uses punctuation as delimiter and will remove all stop words,
+        words shorter than 4 characters, and any special characters that do not
+        belong to ascii.
+        Returns a list of strings (tokens)
+        """
+
         words = []
         if content:
             tokens = nltk.tokenize.WordPunctTokenizer().tokenize(content.lower())
@@ -234,18 +241,18 @@ class Preprocessing:
         return words
 
 
-
-    """
-    This tokenizer will account for the positional index of each of the tokens
-    inside the original text.
-
-    Also, uses punctuation as delimiter and will remove all stop words,
-    words shorter than 4 characters, and any special characters that do not
-    belong to ascii.
-
-    Returns a list of tuples (token, index)
-    """
     def tokenize_span(self, content: str) -> 'List[tuples]':
+        """
+        This tokenizer will account for the positional index of each of the tokens
+        inside the original text.
+
+        Also, uses punctuation as delimiter and will remove all stop words,
+        words shorter than 4 characters, and any special characters that do not
+        belong to ascii.
+
+        Returns a list of tuples (token, index)
+        """
+
         words = []
 
         if content:
@@ -266,18 +273,19 @@ class Preprocessing:
         return words
 
 
-    """
-    This method will calculate the word frequency of the list of tokens.
-    It accepts as parameter both types of tokens created, those that only have
-    frequency and those that are tuples containing (token, index).
-    Lemmatization is applied to all the words that go through the frequency
-    counter.
-
-    Returns a dictionary containing tokens or terms as key and frequency as value.
-    For the processing of the List[(token, span/index)] it will return
-    the token as key, and a nested list [frequency, [indexes it appears]]
-    """
     def word_frequency(self, tokens: 'List[token] or List[(token, span)]') -> 'Dict':
+        """
+        This method will calculate the word frequency of the list of tokens.
+        It accepts as parameter both types of tokens created, those that only have
+        frequency and those that are tuples containing (token, index).
+        Lemmatization is applied to all the words that go through the frequency
+        counter.
+
+        Returns a dictionary containing tokens or terms as key and frequency as value.
+        For the processing of the List[(token, span/index)] it will return
+        the token as key, and a nested list [frequency, [indexes it appears]]
+        """
+
         freq_dict = defaultdict(list)
 
         # Checks if the incoming container is a List of tokens
@@ -327,10 +335,12 @@ class Preprocessing:
 
         return bigrams
 
-    """
-    This method will calculate the word frequency using bi-grams or bi-words
-    """
+
     def bigram_freq(self, content: str) -> 'Dict':
+        """
+        This method will calculate the word frequency using bi-grams or bi-words
+        """
+
         words = []
         dict_bigrams = {}
         if content:
@@ -398,10 +408,12 @@ class Preprocessing:
             length = span[1] - span[0]
             return re.sub(regex_links, " " * length, content)
 
-    """
-    TIDYLIB
-    """
+
     def html_validator(self, raw):
+        """
+        TIDYLIB
+        """
+
         try:
             document, errors = tidy_document(raw,
             options = {'numeric-entities':1,
@@ -449,8 +461,7 @@ class Preprocessing:
 
 
 if __name__ == "__main__":
-    # pass
-
+    
     p = Preprocessing()
     # p.read_json()
     # temp = p.fetch_content("3")
