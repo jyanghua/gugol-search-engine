@@ -58,9 +58,9 @@ Each page consists of 20 results and can be navigated through a pagination syste
 For quick navigation it includes the first and last pages of the search result.<br><br>
 ![Search Page Bottom Pagination Page 13](/docs/screenshots/professor-pagination-13.jpg?raw=true)<br>
 
-**1 Minute Demo (CTRL+click to open in New Tab)**
+**1 Minute Demo**
 
-[![Watch the demo](/docs/screenshots/demo-preview.jpg)](https://i.imgur.com/wrCEehE.mp4)
+[Watch the demo](/docs/GugolDemo.gif)
 
 
 ## Process
