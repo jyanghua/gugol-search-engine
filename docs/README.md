@@ -60,7 +60,7 @@ For quick navigation it includes the first and last pages of the search result.<
 
 **1 Minute Demo**
 
-[Watch the demo](/docs/GugolDemo.gif)
+![Watch the demo](/docs/GugolDemo.gif)
 
 
 ## Process
